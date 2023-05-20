@@ -19,7 +19,7 @@ class MemoryGameViewModel: ObservableObject {
     @Published private var model: MemoryGameModel<String>
 
     var cards: [MemoryGameModel<String>.Card] {
-        model.cards
+        model.cards.shuffled()
     }
         
     static func createMemoryGame(theme: Theme) -> MemoryGameModel<String> {
@@ -72,4 +72,4 @@ extension Color {
     }
 }
 
-
+
