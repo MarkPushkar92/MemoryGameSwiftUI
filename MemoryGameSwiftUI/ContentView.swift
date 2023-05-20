@@ -23,16 +23,20 @@ struct ContentView: View {
                     }
                 }
             }
-            .foregroundColor(.red)
+            .foregroundColor(viewModel.color)
             .padding(.horizontal)
-            .navigationTitle("Memorize!")
+            .navigationTitle("Memorize! \(viewModel.title)")
         }
-       
-        
+        Spacer()
+        newGameButton
     }
     
     //MARK: Buttons
-   
+    var newGameButton: some View {
+        Button("New Game") {
+            viewModel.newGame()
+        }
+    }
     
 }
 
@@ -53,7 +57,6 @@ struct CardView: View {
                  shape.fill()
              }
         }
-     
     }
 }
 
@@ -61,7 +64,7 @@ struct CardView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        let game = MemoryGameViewModel()
+        let game = MemoryGameViewModel(theme: Theme(name: .animals))
 
         ContentView(viewModel: game)
             .preferredColorScheme(.dark)

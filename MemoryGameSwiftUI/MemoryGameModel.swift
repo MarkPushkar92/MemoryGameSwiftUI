@@ -8,7 +8,7 @@
 import Foundation
 
 struct MemoryGameModel<CardContent> where CardContent: Equatable {
-    
+        
     private(set) var cards: Array<Card>
     
     private var indexOfOneAndOnlyFaceUpCard: Int?
@@ -31,19 +31,17 @@ struct MemoryGameModel<CardContent> where CardContent: Equatable {
             }
             cards[chosenIndex].isFaceUp.toggle()
         }
-    } 
+    }
     
     init(numberOfPairsOfCards: Int, createCardContent: (Int) -> CardContent) {
         cards = []
-        
         //add numberOfPairsOfCards x 2 cards array
-        
         for pairIndex in 0..<numberOfPairsOfCards {
             let content: CardContent = createCardContent(pairIndex)
             cards.append(Card(content: content, id: pairIndex*2))
             cards.append(Card(content: content, id: pairIndex*2 + 1))
-
         }
+        cards.shuffle()
     }
     
     struct Card: Identifiable {
@@ -51,7 +49,8 @@ struct MemoryGameModel<CardContent> where CardContent: Equatable {
         var isMatched: Bool = false
         var content: CardContent
         var id: Int
-
+        
     }
-    
+
 }
+

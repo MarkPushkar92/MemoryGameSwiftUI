@@ -10,7 +10,7 @@ import SwiftUI
 @main
 struct MemoryGameSwiftUIApp: App {
     
-    let game = MemoryGameViewModel()
+    let game = MemoryGameViewModel(theme: Theme(name: .vehicles))
     
     var body: some Scene {
         WindowGroup {
