@@ -14,6 +14,8 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             ScrollView {
+                score
+                    .padding(.horizontal)
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 75))]) {
                     ForEach(viewModel.cards) { card in
                         CardView(card: card).aspectRatio(2/3, contentMode: .fit)
@@ -36,6 +38,11 @@ struct ContentView: View {
         Button("New Game") {
             viewModel.newGame()
         }
+    }
+    
+    var score: some View {
+        Text("Score: \(viewModel.score)")
+            .font(.largeTitle)
     }
     
 }
@@ -65,7 +72,6 @@ struct CardView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let game = MemoryGameViewModel(theme: Theme(name: .animals))
-
         ContentView(viewModel: game)
             .preferredColorScheme(.dark)
     }

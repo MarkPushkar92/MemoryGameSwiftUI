@@ -16,10 +16,12 @@ class MemoryGameViewModel: ObservableObject {
     
     var color: Color
     
+    @Published var score: Int = 0
+    
     @Published private var model: MemoryGameModel<String>
 
     var cards: [MemoryGameModel<String>.Card] {
-        model.cards.shuffled()
+        model.cards
     }
         
     static func createMemoryGame(theme: Theme) -> MemoryGameModel<String> {
@@ -33,21 +35,25 @@ class MemoryGameViewModel: ObservableObject {
         model = MemoryGameViewModel.createMemoryGame(theme: theme)
         color = Color[theme.color]
         title = theme.name.rawValue.capitalized
+        score = 0
     }
             
     init(theme: Theme) {
         self.theme = theme
-        model = MemoryGameModel<String>(numberOfPairsOfCards: theme.numberOfPairsOfCards) { pairIndex in
+        self.model = MemoryGameModel<String>(numberOfPairsOfCards: theme.numberOfPairsOfCards) { pairIndex in
             theme.emojis[pairIndex]
         }
-        color = Color[theme.color]
-        title = theme.name.rawValue.capitalized
+        self.color = Color[theme.color]
+        self.title = theme.name.rawValue.capitalized
+        self.score = model.score
     }
     
     //MARK: User interaction
     
     func choose(_ card: MemoryGameModel<String>.Card) {
         model.choose(card)
+        score = model.score
+        
     }
 }
 

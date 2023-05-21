@@ -13,14 +13,25 @@ struct MemoryGameModel<CardContent> where CardContent: Equatable {
     
     private var indexOfOneAndOnlyFaceUpCard: Int?
     
+    var score: Int = 0
+    
     mutating func choose(_ card: Card) {
         if let chosenIndex = cards.firstIndex(where: { $0.id == card.id}),
            !cards[chosenIndex].isFaceUp,
            !cards[chosenIndex].isMatched {
+            
             if let potentialMatchIndex = indexOfOneAndOnlyFaceUpCard {
                 if cards[chosenIndex].content == cards[potentialMatchIndex].content {
                     cards[chosenIndex].isMatched = true
                     cards[potentialMatchIndex].isMatched = true
+                    score += 2 
+                } else {
+                    if cards[chosenIndex].isBeenSeenBefore || cards[potentialMatchIndex].isBeenSeenBefore {
+                        score -= 1
+                    } else {
+                        cards[chosenIndex].isBeenSeenBefore = true
+                        cards[potentialMatchIndex].isBeenSeenBefore = true
+                    }
                 }
                 indexOfOneAndOnlyFaceUpCard = nil
             } else {
@@ -49,7 +60,7 @@ struct MemoryGameModel<CardContent> where CardContent: Equatable {
         var isMatched: Bool = false
         var content: CardContent
         var id: Int
-        
+        var isBeenSeenBefore = false
     }
 
 }
