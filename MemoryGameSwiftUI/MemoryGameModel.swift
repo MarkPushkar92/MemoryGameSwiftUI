@@ -12,27 +12,8 @@ struct MemoryGameModel<CardContent> where CardContent: Equatable {
     private(set) var cards: Array<Card>
     
     private var indexOfOneAndOnlyFaceUpCard: Int? {
-        get {
-            var faceUpCardsIndicies = [Int]()
-            for index in cards.indices {
-                if cards[index].isFaceUp {
-                    faceUpCardsIndicies.append(index)
-                }
-            }
-            if faceUpCardsIndicies.count == 1 {
-                return faceUpCardsIndicies.first
-            } else {
-                return nil
-            }
-        } set {
-            for index in cards.indices {
-                if index != newValue {
-                    cards[index].isFaceUp = false
-                } else {
-                    cards[index].isFaceUp = true
-                }
-            }
-        }
+        get { cards.indices.filter { cards[$0].isFaceUp }.oneAndOnly }
+        set { cards.indices.forEach { cards[$0].isFaceUp = ($0 == newValue )} }
     }
     
     private(set) var score: Int = 0
@@ -82,3 +63,12 @@ struct MemoryGameModel<CardContent> where CardContent: Equatable {
 
 }
 
+extension Array {
+    var oneAndOnly: Element? {
+        if self.count == 1 {
+            return self.first
+        } else {
+            return nil
+        }
+    }
+}
