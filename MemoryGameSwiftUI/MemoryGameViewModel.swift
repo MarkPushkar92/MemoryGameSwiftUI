@@ -10,25 +10,33 @@ import SwiftUI
 
 class MemoryGameViewModel: ObservableObject {
     
+    typealias Card = MemoryGameModel<String>.Card
+    
+    //MARK: Properties
+    
     var theme: Theme
     
     var title: String
-    
+
     var color: Color
     
     @Published var score: Int = 0
     
     @Published private var model: MemoryGameModel<String>
 
-    var cards: [MemoryGameModel<String>.Card] {
+    var cards: [Card] {
         model.cards
     }
+    
+    //MARK: Funcs
         
     static func createMemoryGame(theme: Theme) -> MemoryGameModel<String> {
         MemoryGameModel<String>(numberOfPairsOfCards: theme.numberOfPairsOfCards) { pairIndex in
             theme.emojis[pairIndex]
         }
     }
+    
+    // User interaction
     
     func newGame() {
         let theme = Theme(name: .allCases.randomElement() ?? .animals)
@@ -37,6 +45,13 @@ class MemoryGameViewModel: ObservableObject {
         title = theme.name.rawValue.capitalized
         score = 0
     }
+    
+    func choose(_ card:  Card) {
+        model.choose(card)
+        score = model.score
+    }
+    
+    //MARK: Init
             
     init(theme: Theme) {
         self.theme = theme
@@ -47,15 +62,9 @@ class MemoryGameViewModel: ObservableObject {
         self.title = theme.name.rawValue.capitalized
         self.score = model.score
     }
-    
-    //MARK: User interaction
-    
-    func choose(_ card: MemoryGameModel<String>.Card) {
-        model.choose(card)
-        score = model.score
-        
-    }
 }
+
+//MARK: Color extension 
 
 extension Color {
     static subscript(name: String) -> Color {

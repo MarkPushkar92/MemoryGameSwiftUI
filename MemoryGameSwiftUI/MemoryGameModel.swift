@@ -11,15 +11,36 @@ struct MemoryGameModel<CardContent> where CardContent: Equatable {
         
     private(set) var cards: Array<Card>
     
-    private var indexOfOneAndOnlyFaceUpCard: Int?
+    private var indexOfOneAndOnlyFaceUpCard: Int? {
+        get {
+            var faceUpCardsIndicies = [Int]()
+            for index in cards.indices {
+                if cards[index].isFaceUp {
+                    faceUpCardsIndicies.append(index)
+                }
+            }
+            if faceUpCardsIndicies.count == 1 {
+                return faceUpCardsIndicies.first
+            } else {
+                return nil
+            }
+        } set {
+            for index in cards.indices {
+                if index != newValue {
+                    cards[index].isFaceUp = false
+                } else {
+                    cards[index].isFaceUp = true
+                }
+            }
+        }
+    }
     
-    var score: Int = 0
+    private(set) var score: Int = 0
     
     mutating func choose(_ card: Card) {
         if let chosenIndex = cards.firstIndex(where: { $0.id == card.id}),
            !cards[chosenIndex].isFaceUp,
            !cards[chosenIndex].isMatched {
-            
             if let potentialMatchIndex = indexOfOneAndOnlyFaceUpCard {
                 if cards[chosenIndex].content == cards[potentialMatchIndex].content {
                     cards[chosenIndex].isMatched = true
@@ -33,14 +54,10 @@ struct MemoryGameModel<CardContent> where CardContent: Equatable {
                         cards[potentialMatchIndex].isBeenSeenBefore = true
                     }
                 }
-                indexOfOneAndOnlyFaceUpCard = nil
+                cards[chosenIndex].isFaceUp = true
             } else {
-                for index in cards.indices {
-                    cards[index].isFaceUp = false
-                }
                 indexOfOneAndOnlyFaceUpCard = chosenIndex
             }
-            cards[chosenIndex].isFaceUp.toggle()
         }
     }
     
@@ -56,10 +73,10 @@ struct MemoryGameModel<CardContent> where CardContent: Equatable {
     }
     
     struct Card: Identifiable {
-        var isFaceUp: Bool = false
-        var isMatched: Bool = false
-        var content: CardContent
-        var id: Int
+        var isFaceUp = false
+        var isMatched = false
+        let content: CardContent
+        let id: Int
         var isBeenSeenBefore = false
     }
 

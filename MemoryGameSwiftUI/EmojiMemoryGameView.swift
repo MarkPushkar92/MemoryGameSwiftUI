@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct EmojiMemoryGameView: View {
     
     @ObservedObject var viewModel: MemoryGameViewModel
     
@@ -15,7 +15,7 @@ struct ContentView: View {
         NavigationView {
             ScrollView {
                 score
-                    .padding(.horizontal)
+                .padding(.horizontal)
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 75))]) {
                     ForEach(viewModel.cards) { card in
                         CardView(card: card).aspectRatio(2/3, contentMode: .fit)
@@ -24,8 +24,9 @@ struct ContentView: View {
                             }
                     }
                 }
+                .foregroundColor(viewModel.color)
+
             }
-            .foregroundColor(viewModel.color)
             .padding(.horizontal)
             .navigationTitle("Memorize! \(viewModel.title)")
         }
@@ -44,13 +45,12 @@ struct ContentView: View {
         Text("Score: \(viewModel.score)")
             .font(.largeTitle)
     }
-    
 }
 
 //MARK: CardView
 
 struct CardView: View {
-    let card: MemoryGameModel<String>.Card
+    let card: MemoryGameViewModel.Card
     var body: some View {
          ZStack {
              let shape = RoundedRectangle(cornerRadius: 20)
@@ -72,7 +72,7 @@ struct CardView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let game = MemoryGameViewModel(theme: Theme(name: .animals))
-        ContentView(viewModel: game)
+        EmojiMemoryGameView(viewModel: game)
             .preferredColorScheme(.dark)
     }
 }
