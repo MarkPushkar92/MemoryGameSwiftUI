@@ -51,6 +51,10 @@ class MemoryGameViewModel: ObservableObject {
         score = model.score
     }
     
+    func shuffle() {
+        model.shuffle()
+    }
+    
     //MARK: Init
             
     init(theme: Theme) {

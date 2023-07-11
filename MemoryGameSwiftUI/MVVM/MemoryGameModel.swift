@@ -42,6 +42,10 @@ struct MemoryGameModel<CardContent> where CardContent: Equatable {
         }
     }
     
+    mutating func shuffle() {
+        cards.shuffle()
+    }
+    
     init(numberOfPairsOfCards: Int, createCardContent: (Int) -> CardContent) {
         cards = []
         //add numberOfPairsOfCards x 2 cards array
